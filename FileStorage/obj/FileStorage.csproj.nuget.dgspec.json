@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Camil\\Source\\Repos\\FileStorageServer\\FileStorage\\FileStorage.csproj": {}
+    "C:\\Users\\Camil\\source\\repos\\FileStorage\\FileStorage\\FileStorage.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Camil\\Source\\Repos\\FileStorageServer\\FileStorage\\FileStorage.csproj": {
+    "C:\\Users\\Camil\\source\\repos\\FileStorage\\FileStorage\\FileStorage.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Camil\\Source\\Repos\\FileStorageServer\\FileStorage\\FileStorage.csproj",
+        "projectUniqueName": "C:\\Users\\Camil\\source\\repos\\FileStorage\\FileStorage\\FileStorage.csproj",
         "projectName": "FileStorage",
-        "projectPath": "C:\\Users\\Camil\\Source\\Repos\\FileStorageServer\\FileStorage\\FileStorage.csproj",
+        "projectPath": "C:\\Users\\Camil\\source\\repos\\FileStorage\\FileStorage\\FileStorage.csproj",
         "packagesPath": "C:\\Users\\Camil\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Camil\\Source\\Repos\\FileStorageServer\\FileStorage\\obj\\",
+        "outputPath": "C:\\Users\\Camil\\source\\repos\\FileStorage\\FileStorage\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Camil\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -45,6 +45,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "Google.Apis.Auth": {
+              "target": "Package",
+              "version": "[1.68.0, )"
+            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[6.0.33, )"
