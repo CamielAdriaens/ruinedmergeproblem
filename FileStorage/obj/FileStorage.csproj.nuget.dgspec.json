@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Camil\\source\\repos\\FileStorage\\FileStorage\\FileStorage.csproj": {}
+    "C:\\Users\\Camil\\Source\\Repos\\FileStorageServer\\FileStorage\\FileStorage.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Camil\\source\\repos\\FileStorage\\FileStorage\\FileStorage.csproj": {
+    "C:\\Users\\Camil\\Source\\Repos\\FileStorageServer\\FileStorage\\FileStorage.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Camil\\source\\repos\\FileStorage\\FileStorage\\FileStorage.csproj",
+        "projectUniqueName": "C:\\Users\\Camil\\Source\\Repos\\FileStorageServer\\FileStorage\\FileStorage.csproj",
         "projectName": "FileStorage",
-        "projectPath": "C:\\Users\\Camil\\source\\repos\\FileStorage\\FileStorage\\FileStorage.csproj",
+        "projectPath": "C:\\Users\\Camil\\Source\\Repos\\FileStorageServer\\FileStorage\\FileStorage.csproj",
         "packagesPath": "C:\\Users\\Camil\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Camil\\source\\repos\\FileStorage\\FileStorage\\obj\\",
+        "outputPath": "C:\\Users\\Camil\\Source\\Repos\\FileStorageServer\\FileStorage\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Camil\\AppData\\Roaming\\NuGet\\NuGet.Config",
