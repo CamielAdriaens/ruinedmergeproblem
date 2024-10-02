@@ -1,0 +1,7 @@
+C:\Users\Camil\source\repos\FileStorage\FileStorage\obj\Debug\net6.0\FileStorage.csproj.AssemblyReference.cache
+C:\Users\Camil\source\repos\FileStorage\FileStorage\obj\Debug\net6.0\FileStorage.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Camil\source\repos\FileStorage\FileStorage\obj\Debug\net6.0\FileStorage.AssemblyInfoInputs.cache
+C:\Users\Camil\source\repos\FileStorage\FileStorage\obj\Debug\net6.0\FileStorage.AssemblyInfo.cs
+C:\Users\Camil\source\repos\FileStorage\FileStorage\obj\Debug\net6.0\FileStorage.csproj.CoreCompileInputs.cache
+C:\Users\Camil\source\repos\FileStorage\FileStorage\obj\Debug\net6.0\FileStorage.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Camil\source\repos\FileStorage\FileStorage\obj\Debug\net6.0\FileStorage.MvcApplicationPartsAssemblyInfo.cache
