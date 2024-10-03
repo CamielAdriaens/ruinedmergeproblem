@@ -1,112 +1,64 @@
 ﻿using FileStorage.Database;
-using FileStorage.Models; // Import your FileMetadata model
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
-using System.Security.Claims;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace FileStorage.Controllers
 {
-    [Authorize]
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("api/files")]
     public class FilesController : ControllerBase
     {
-        private readonly MongoDbContext _dbContext;
+        private readonly IGridFSBucket _gridFS;
 
         public FilesController(MongoDbContext dbContext)
         {
-            _dbContext = dbContext;
+            _gridFS = dbContext.GridFSBucket; // Inject GridFS from MongoDbContext
         }
 
+        // List all files stored in GridFS
+        [HttpGet]
+        public async Task<IActionResult> GetFiles()
+        {
+            var files = await _gridFS.Find(Builders<GridFSFileInfo>.Filter.Empty).ToListAsync();
+            return Ok(files);
+        }
+
+        // Upload a new file to GridFS
         [HttpPost("upload")]
         public async Task<IActionResult> UploadFile([FromForm] IFormFile file)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
+            if (file == null || file.Length == 0)
             {
-                return Unauthorized("User is not authenticated.");
+                return BadRequest("File not selected.");
             }
 
-            // Use GetDatabase to initialize the GridFSBucket
-            var bucket = new GridFSBucket(_dbContext.GetDatabase());
-
-            using var stream = file.OpenReadStream();
-            var fileId = await bucket.UploadFromStreamAsync(file.FileName, stream);
-
-            // Save metadata linking file to user
-            var fileMetadata = new FileMetadata
+            using (var stream = file.OpenReadStream())
             {
-                UserId = userId,
-                FileId = fileId,
-                FileName = file.FileName,
-                UploadDate = DateTime.UtcNow
-            };
-            await _dbContext.GetFileCollection().InsertOneAsync(fileMetadata);
-
-            return Ok(new { FileId = fileId });
-        }
-
-        [HttpGet("my-files")]
-        public async Task<IActionResult> GetUserFiles()
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
-            {
-                return Unauthorized("User is not authenticated.");
+                var fileId = await _gridFS.UploadFromStreamAsync(file.FileName, stream);
+                return Ok(new { FileId = fileId });
             }
-
-            var files = await _dbContext.GetFileCollection()
-                .Find(f => f.UserId == userId)
-                .ToListAsync();
-
-            return Ok(files);
         }
+
+        // Download a file from GridFS by its ObjectId
         [HttpGet("download/{id}")]
         public async Task<IActionResult> DownloadFile(string id)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
+            var fileId = new ObjectId(id);
+            var stream = new MemoryStream();
+            await _gridFS.DownloadToStreamAsync(fileId, stream);
+            stream.Position = 0;  // Reset the stream position before returning the file
+
+            var fileInfo = await _gridFS.Find(Builders<GridFSFileInfo>.Filter.Eq("_id", fileId)).FirstOrDefaultAsync();
+            if (fileInfo == null)
             {
-                return Unauthorized("User is not authenticated.");
+                return NotFound();
             }
 
-            var fileMetadata = await _dbContext.GetFileCollection().Find(f => f.Id == id && f.UserId == userId).FirstOrDefaultAsync();
-            if (fileMetadata == null)
-            {
-                return NotFound("File not found.");
-            }
-
-            var bucket = new GridFSBucket(_dbContext.GetDatabase());
-            var fileStream = await bucket.OpenDownloadStreamAsync(fileMetadata.FileId);
-
-            return File(fileStream, "application/octet-stream", fileMetadata.FileName);
+            return File(stream, "application/octet-stream", fileInfo.Filename); // Download the file
         }
-        [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> DeleteFile(string id)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
-            {
-                return Unauthorized("User is not authenticated.");
-            }
-
-            var fileMetadata = await _dbContext.GetFileCollection().Find(f => f.Id == id && f.UserId == userId).FirstOrDefaultAsync();
-            if (fileMetadata == null)
-            {
-                return NotFound("File not found.");
-            }
-
-            var bucket = new GridFSBucket(_dbContext.GetDatabase());
-            await bucket.DeleteAsync(fileMetadata.FileId);
-
-            // Remove the metadata
-            await _dbContext.GetFileCollection().DeleteOneAsync(f => f.Id == id);
-
-            return Ok("File deleted.");
-        }
-
     }
 }

@@ -1,30 +1,24 @@
 ﻿using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
 using Microsoft.Extensions.Configuration;
-using FileStorage.Models;
 
 namespace FileStorage.Database
 {
     public class MongoDbContext
     {
         private readonly IMongoDatabase _database;
-        private readonly IConfiguration _configuration;
+        public IGridFSBucket GridFSBucket { get; }
 
         public MongoDbContext(IConfiguration configuration)
         {
-            _configuration = configuration;
-            var client = new MongoClient(_configuration["MongoDB:ConnectionString"]);
-            _database = client.GetDatabase(_configuration["MongoDB:DatabaseName"]);
+            var client = new MongoClient(configuration["MongoDB:ConnectionString"]);
+            _database = client.GetDatabase(configuration["MongoDB:DatabaseName"]);
+            GridFSBucket = new GridFSBucket(_database);  // Initialize GridFS bucket
         }
 
-        // This method provides access to the IMongoDatabase instance
         public IMongoDatabase GetDatabase()
         {
             return _database;
         }
-
-        // Return the file metadata collection (e.g., storing metadata about files)
-        public IMongoCollection<FileMetadata> GetFileCollection() =>
-            _database.GetCollection<FileMetadata>(_configuration["MongoDB:FileCollection"]);
     }
 }

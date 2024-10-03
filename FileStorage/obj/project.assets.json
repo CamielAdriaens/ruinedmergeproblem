@@ -2263,19 +2263,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Camil\\.nuget\\packages\\": {}
+    "C:\\Users\\Camil\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Camil\\source\\repos\\FileStorage\\FileStorage\\FileStorage.csproj",
+      "projectUniqueName": "C:\\Users\\Camil\\Documents\\GitHub\\FileStorageServer\\FileStorage\\FileStorage.csproj",
       "projectName": "FileStorage",
-      "projectPath": "C:\\Users\\Camil\\source\\repos\\FileStorage\\FileStorage\\FileStorage.csproj",
+      "projectPath": "C:\\Users\\Camil\\Documents\\GitHub\\FileStorageServer\\FileStorage\\FileStorage.csproj",
       "packagesPath": "C:\\Users\\Camil\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Camil\\source\\repos\\FileStorage\\FileStorage\\obj\\",
+      "outputPath": "C:\\Users\\Camil\\Documents\\GitHub\\FileStorageServer\\FileStorage\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
         "C:\\Users\\Camil\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -2295,11 +2300,6 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -2346,7 +2346,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
       }
     }
   }

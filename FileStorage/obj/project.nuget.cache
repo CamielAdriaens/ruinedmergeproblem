@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "/02WleMKFTU+QOiZ4mnGaYgBpOmfFJyZ1g5lqvt/kPk7zucMIaeG8zkhDsr8Pp3dgEAsKfLBTi+pxqmg82Jh4w==",
+  "dgSpecHash": "OK/LkUEvxa1UsuBd8OxzOnh0KTtpCtjv0IbTbuOGNEmG7k71hX2kn4OBS55xf4R+q2AraYLbEinrjJGXe3sTuw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Camil\\source\\repos\\FileStorage\\FileStorage\\FileStorage.csproj",
+  "projectFilePath": "C:\\Users\\Camil\\Documents\\GitHub\\FileStorageServer\\FileStorage\\FileStorage.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Camil\\.nuget\\packages\\awssdk.core\\3.7.100.14\\awssdk.core.3.7.100.14.nupkg.sha512",
     "C:\\Users\\Camil\\.nuget\\packages\\awssdk.securitytoken\\3.7.100.14\\awssdk.securitytoken.3.7.100.14.nupkg.sha512",
