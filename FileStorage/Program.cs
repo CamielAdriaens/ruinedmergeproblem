@@ -29,6 +29,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.Authority = "https://accounts.google.com";
         options.Audience = "328029009489-7j3ksnst6u05dbq0uhtnc2862t027se7.apps.googleusercontent.com"; // Your Google Client ID
     });
+builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDbSettings"));
+builder.Services.AddSingleton<MongoDbContext>();
 
 var app = builder.Build();
 

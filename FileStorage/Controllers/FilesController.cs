@@ -12,81 +12,66 @@ namespace FileStorage.Controllers
     [ApiController]
     public class FilesController : ControllerBase
     {
-        private readonly IGridFSBucket _gridFS;
+        private readonly MongoDbContext _mongoDbContext;
 
-        public FilesController(MongoDbContext dbContext)
+        public FilesController(MongoDbContext mongoDbContext)
         {
-            _gridFS = dbContext.GridFSBucket; // Inject GridFS from MongoDbContext
+            _mongoDbContext = mongoDbContext;
         }
-
-        // List all files stored in GridFS
-        [HttpGet]
+        [HttpGet()]
         public async Task<IActionResult> GetFiles()
         {
-            try
-            {
-                // Fetch all files from GridFS
-                var files = await _gridFS.Find(Builders<GridFSFileInfo>.Filter.Empty).ToListAsync();
+            var files = await _mongoDbContext.GetFilesAsync();
 
-                // Simplify the GridFSFileInfo object to avoid serialization issues
-                var fileDtos = files.Select(file => new
+            var fileInfos = new List<object>();
+            foreach (var file in files)
+            {
+                fileInfos.Add(new
                 {
-                    Id = file.Id.ToString(),  // Convert ObjectId to string
-                    Filename = file.Filename,
-                    Length = file.Length,     // Size of the file
-                    UploadDate = file.UploadDateTime
-                }).ToList();
+                    Id = file.Id.ToString(),
+                    FileName = file.Filename,
+                    UploadDate = file.UploadDateTime,
+                    Length = file.Length
+                });
+            }
 
-                return Ok(fileDtos);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error fetching files: {ex.Message}");
-                return StatusCode(500, "An error occurred while fetching the files.");
-            }
+            return Ok(fileInfos);
         }
-
-        // Upload a new file to GridFS
         [HttpPost("upload")]
         public async Task<IActionResult> UploadFile([FromForm] IFormFile file)
         {
             if (file == null || file.Length == 0)
-            {
-                return BadRequest("File not selected.");
-            }
+                return BadRequest("File is not provided");
 
-            using (var stream = file.OpenReadStream())
-            {
-                var fileId = await _gridFS.UploadFromStreamAsync(file.FileName, stream);
-                return Ok(new { FileId = fileId });
-            }
+            using var stream = file.OpenReadStream();
+            var fileId = await _mongoDbContext.UploadFileAsync(stream, file.FileName);
+
+            return Ok(new { FileId = fileId.ToString() });
         }
 
         [HttpGet("download/{id}")]
         public async Task<IActionResult> DownloadFile(string id)
         {
-            try
-            {
-                Console.WriteLine($"Downloading file with ID: {id}");  // Log the ID for debugging
-                var fileId = new ObjectId(id);  // Convert the string ID to MongoDB ObjectId
+            if (!ObjectId.TryParse(id, out ObjectId objectId))
+                return BadRequest("Invalid file ID");
 
-                var stream = new MemoryStream();
-                await _gridFS.DownloadToStreamAsync(fileId, stream);
-                stream.Position = 0;  // Reset stream position before returning the file
+            var fileStream = await _mongoDbContext.DownloadFileAsync(objectId);
 
-                var fileInfo = await _gridFS.Find(Builders<GridFSFileInfo>.Filter.Eq("_id", fileId)).FirstOrDefaultAsync();
-                if (fileInfo == null)
-                {
-                    return NotFound();
-                }
+            if (fileStream == null)
+                return NotFound();
 
-                return File(stream, "application/octet-stream", fileInfo.Filename);  // Download the file
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error downloading file: {ex.Message}");
-                return StatusCode(500, "An error occurred while downloading the file.");
-            }
+            return File(fileStream, "application/octet-stream", $"{id}.file");
+        }
+
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteFile(string id)
+        {
+            if (!ObjectId.TryParse(id, out ObjectId objectId))
+                return BadRequest("Invalid file ID");
+
+            await _mongoDbContext.DeleteFileAsync(objectId);
+
+            return NoContent();
         }
     }
 }
